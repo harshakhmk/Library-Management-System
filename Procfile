@@ -1,0 +1,1 @@
+web: gunicorn LibraryManagmentSystem.wsgi --log-file -
