@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <style>
+        .books{
+            margin-top: 100px;
+            margin-left: 200px;
+            border: #13e7ee 8px solid;
+            padding:5px;
+            width:75%;
+
+            text-align: center;
+            position:static;
+
+        }
+        .wraper-div {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .home-btn {
+          position: absolute;
+            top: 50px;
+            left: 30px;
+            border-radius: 8px;
+            background-color: #fff;
+            border: none;
+            text-decoration: underline;
+            color: #3498db;
+            padding: 10px;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+        .admin-btn {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            border-radius: 8px;
+            background-color: #fff;
+            border: none;
+            text-decoration: underline;
+            color: #3498db;
+            padding: 10px;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        </style>
+</head>
+<body>
+    <div>
+        {% if messages %}
+        <div class="msg-div" id="msg-div">
+            {% for msg in messages %}
+            <span class="close" id="close">&times;</span>
+            <div class="status-msg">
+                {{msg.message}}
+            </div>
+            <br> {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="wrapper-div">
+         <a href="{% url 'home' %}" class="btn home-btn" id="admin-btn">Home</a>
+        <a href="{% url 'newbook' %}" class="btn admin-btn" id="admin-btn">Add Book</a>
+
+    </div>
+
+    <div class="books">
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author name</th>
+              <th>Image URL</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for book in books %}
+              <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td><a href="{{ book.image_url }}" target="_blank">Image Link</a></td>
+                 <td>{{book.category}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        </div>
+
+<script>
+
+setTimeout(function() {
+            $('.messages').fadeOut('fast');
+        }, 10000);
+
+        var close = document.getElementById("close");
+
+        close.onclick = function() {
+            document.getElementById("msg-div").style.display = "none";
+        }
+</script>
+
+</body>
+</html>

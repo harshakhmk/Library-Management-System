@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div>
+        {% if messages %}
+
+        <div class="msg-div" id="msg-div">
+            {% for msg in messages %}
+
+            <span class="close" id="close">&times;</span>
+
+            <div class="status-msg">
+                {{msg.message}}
+            </div>
+
+            <br> {% endfor %}
+        </div>
+
+        {% endif %}
+    </div>
+
+
+
+    <div class="wrapper">
+        <div class="title-text">
+            <div class="title login">
+                Login </div>
+        </div>
+        <div class="form-container">
+            <div class="form-inner">
+                <form  class="login" method="post">
+                    {% csrf_token %}
+                    <div class="field">
+                        <input type="email" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+
+                    <div class="field btn">
+                        <div class="btn-layer">
+                        </div>
+                        <input type="submit" value="Login">
+
+                    </div>
+                    <div class="signup-link">
+                        Not a member? <a href="{% url 'register'   %}">Sign Up</a></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        setTimeout(function() {
+            $('.messages').fadeOut('fast');
+        }, 10000);
+
+        setTimeout(function() {
+            $('.messages').fadeOut('fast');
+        }, 10000);
+
+        var close = document.getElementById("close");
+
+        close.onclick = function() {
+            document.getElementById("msg-div").style.display = "none";
+        }
+
+        </script>
+
+
+</body>
+
+</html>
