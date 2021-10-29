@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect,reverse
+from django.shortcuts import render, redirect, reverse
 from .forms import RegisterForm, LoginForm
 from .models import User
 from django.contrib.auth import logout
@@ -16,6 +16,7 @@ from rest_framework import status, generics, views
 
 # Create your views here.
 
+
 def RegisterView(request):
     if request.method == "GET":
         form = RegisterForm()
@@ -24,24 +25,24 @@ def RegisterView(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            user = User.objects.get(email=request.POST.get("email",""))
-            user.is_superuser= True
+            user = User.objects.get(email=request.POST.get("email", ""))
+            user.is_superuser = True
             user.save()
             token = RefreshToken.for_user(user).access_token
             current_domain = get_current_site(request).domain
             relative_url = reverse("verify-email")
             absolute_url = (
-            "http://" + current_domain + relative_url + "?token=" + str(token)
+                "http://" + current_domain + relative_url + "?token=" + str(token)
             )
             message_body = (
-            f"Hi {user.username}, please verify your email address from below link\n"
-            + absolute_url
-        )
+                f"Hi {user.username}, please verify your email address from below link\n"
+                + absolute_url
+            )
             email_data = {
-            "body": message_body,
-            "subject": "Verify your email",
-            "to_email": user.email,
-        }
+                "body": message_body,
+                "subject": "Verify your email",
+                "to_email": user.email,
+            }
             Util.send_email(email_data)
             messages.success(request, "Your account successfully created")
             return redirect("login")
@@ -54,22 +55,22 @@ def RegisterView(request):
 def VerifyEmail(request):
     token = request.GET.get("token")
     try:
-            data = jwt.decode(token, settings.SECRET_KEY)
-            user = User.objects.filter(id=data["user_id"])
-            message = ""
-            if user.is_verified:
-                message =  "Already verified"
+        data = jwt.decode(token, settings.SECRET_KEY)
+        user = User.objects.filter(id=data["user_id"])
+        message = ""
+        if user.is_verified:
+            message = "Already verified"
 
-            user.is_verified = True
-            user.save()
-            message = "Successfully verified"
-            messages.success(request, f" {message} ")
-            return redirect("incoming-applications")
+        user.is_verified = True
+        user.save()
+        message = "Successfully verified"
+        messages.success(request, f" {message} ")
+        return redirect("incoming-applications")
     except jwt.ExpiredSignatureError as e:
-                message="Activation link Expired"
+        message = "Activation link Expired"
 
     except jwt.Exceptions.DecodeError as de:
-            message= "Invalid Token"
+        message = "Invalid Token"
     messages.error(request, f"{message} ")
     return redirect("verify-email")
 
