@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='/accounts/login/')
 def my_books(request):
     return render(
         request,
@@ -11,7 +12,7 @@ def my_books(request):
         {"books": Books.objects.filter(created_by_user_id=request.user)},
     )
 
-
+@login_required(login_url='/accounts/login/')
 def newbook(request):
     if request.method == "GET":
         book_form = BookForm()
